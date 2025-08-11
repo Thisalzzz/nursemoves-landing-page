@@ -1,5 +1,7 @@
 // src/components/FeaturesSection.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 const features = [
   {
@@ -42,32 +44,89 @@ const features = [
 ];
 
 const FeaturesSection = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  // Animation variants
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    show: { 
+      y: 0, 
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 100
+      }
+    }
+  };
+
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gradient-to-br from-slate-50 to-indigo-50" ref={ref}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">
             Everything You Need
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
             Tools designed to make your nursing career flexible and fulfilling
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={container}
+          initial="hidden"
+          animate={inView ? "show" : "hidden"}
+        >
           {features.map((feature, index) => (
-            <div 
+            <motion.div 
               key={index} 
-              className="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300"
+              variants={item}
+              className="group"
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
             >
-              <div className="text-blue-600 mb-4">
-                {feature.icon}
+              <div className="h-full bg-white p-8 rounded-2xl shadow-lg border border-indigo-50 group-hover:shadow-xl transition-all duration-300 flex flex-col">
+                <div className="mb-6">
+                  <div className="inline-block p-4 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+                    <div className="text-blue-600 group-hover:text-indigo-700 transition-colors duration-300">
+                      {feature.icon}
+                    </div>
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-700 transition-all duration-300">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 flex-grow">{feature.description}</p>
+                
+                {/* Animated underline effect */}
+                <div className="mt-6">
+                  <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full transition-all duration-500 group-hover:w-24"></div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
