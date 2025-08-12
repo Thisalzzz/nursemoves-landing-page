@@ -1,125 +1,156 @@
-// src/components/HeroSection.jsx
-import React, { useEffect } from 'react';
-import logo from '../assets/logo1.jpg';
-import hero from '../assets/hero.png';
+import React, { useState } from "react";
+
+import scrub from "../assets/scrub.png";
+import tunes from "../assets/tunes.png";
+import nurse from "../assets/nurse.png";
 
 const HeroSection = () => {
-  useEffect(() => {
-    const logoElement = document.querySelector('.logo-container');
-    if (logoElement) {
-      setTimeout(() => {
-        logoElement.classList.add('animate-float');
-      }, 100);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [position, setPosition] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!name.trim()) {
+      alert("Please enter your name");
+      return;
     }
-  }, []);
+
+    if (!email.trim()) {
+      alert("Please enter your email address");
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    if (!position) {
+      alert("Please select your nursing section");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://v1.nocodeapi.com/nursemoves/google_sheets/wSONYnesksfXcOGt?tabId=Sheet1",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([
+            [name, email, position, new Date().toISOString()],
+          ]),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Thanks for pre-subscribing! We'll be in touch soon.");
+        setName("");
+        setEmail("");
+        setPosition("");
+      } else {
+        alert("Failed to submit. Please try again later.");
+        console.error("API Error:", result);
+      }
+    } catch (error) {
+      alert("An unexpected error occurred. Please try again.");
+      console.error("Submission Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <style jsx>{`
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0px); }
-        }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
-        }
-        .logo-glow {
-          transition: all 0.7s ease;
-          box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 
-                      0 0 50px rgba(59, 130, 246, 0.4);
-        }
-        .logo-container:hover .logo-glow {
-          box-shadow: 0 0 40px rgba(59, 130, 246, 1), 
-                      0 0 60px rgba(59, 130, 246, 0.6);
-        }
-        .button-glow {
-          transition: all 0.3s ease;
-        }
-        .button-glow:hover {
-          box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
-          transform: translateY(-3px) scale(1.02);
-        }
-        .text-glow {
-          text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-        }
-      `}</style>
+    <section className="bg-white min-h-screen py-12 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12">
+      {/* Left Text + Form */}
+      <div className="flex-1 max-w-lg">
+        <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+          <span className="text-yellow-500"> NurseMoves </span> - Pre Subscribe
+          to the greatest app ever built for nurses
+        </h1>
+        <p className="text-lg text-gray-600 mt-2">designed by nurses</p>
 
-      {/* Modern Background Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${hero})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-black/30"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.7)_100%)]"></div>
-        </div>
-      </div>
-
-      {/* Floating Particles */}
-      <div className="absolute inset-0 z-1 pointer-events-none">
-        {[...Array(20)].map((_, i) => {
-          const size = Math.random() * 20 + 5;
-          const isBlue = Math.random() > 0.5;
-          return (
-            <div 
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                backgroundColor: isBlue ? 'rgba(59, 130, 246, 0.3)' : 'rgba(255, 255, 255, 0.2)',
-                animation: `float ${Math.random() * 6 + 4}s infinite ease-in-out`,
-                animationDelay: `${Math.random() * 2}s`,
-                filter: 'blur(1px)'
-              }}
-            />
-          );
-        })}
-      </div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Bouncing Logo Container */}
-          <div className="mb-12 flex justify-center">
-            <div className="logo-container bg-white p-1 rounded-full transform transition-all duration-500 hover:scale-105">
-              <div className="logo-glow rounded-full p-2">
-                <img 
-                  src={logo} 
-                  alt="NurseMoves Logo" 
-                  className="w-40 h-40 object-contain rounded-full border-4 border-white"
-                />
-              </div>
-            </div>
-          </div>
-
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight text-glow">
-            <span className="text-[#ddf508]">NurseMoves</span>: Shift Your Career, Effortlessly
-          </h1>
-
-          <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-2xl mx-auto bg-black/30 py-4 px-6 rounded-xl backdrop-blur-sm border border-white/10">
-            Connect with flexible healthcare opportunities on your terms
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
+          <p className="text-sm text-gray-700 mb-4">
+            Be one of the first{" "}
+            <span className="font-semibold">1000 pre-subscribers</span> to use
+            the app for free!
           </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <button className="button-glow bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 flex items-center justify-center">
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Download for Android
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <select
+              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Select your section
+              </option>
+              <option value="paediatric">Paediatric</option>
+              <option value="icu">ICU</option>
+              <option value="emergency">Emergency</option>
+              <option value="surgical">Surgical</option>
+              <option value="other">Other</option>
+            </select>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {isLoading ? "Processing..." : "Pre-Subscribe"}
             </button>
-            <button className="button-glow bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 flex items-center justify-center">
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Download for iOS
-            </button>
-          </div>
+          </form>
         </div>
+      </div>
+
+      {/* Right Images */}
+      <div className="flex-1 flex flex-col items-center justify-center relative min-h-[500px] lg:min-h-[600px] w-full">
+        {/* Nurse Image - Mobile & Desktop */}
+        <img
+          src={nurse}
+          alt="Nurse"
+          className="
+            block 
+            w-40 sm:w-52 md:w-64 h-auto rounded-lg z-0 mb-6
+            lg:absolute lg:right-[-58px] lg:top-1/2 lg:-translate-y-1/2 lg:w-[30rem] lg:mb-0
+          "
+        />
+
+        {/* Phone Mockups */}
+        <img
+          src={scrub}
+          alt="App Mockup 1"
+          className="w-40 sm:w-52 md:w-64 lg:w-120 rounded-xl z-20 relative lg:absolute lg:left-1/2 lg:-translate-x-[60%] lg:-top-0"
+        />
+        <img
+          src={tunes}
+          alt="App Mockup 2"
+          className="w-40 sm:w-52 md:w-64 lg:w-120 rounded-xl z-10 relative mt-4 lg:absolute lg:left-1/2 lg:-translate-x-[40%] lg:top-30"
+        />
       </div>
     </section>
   );
