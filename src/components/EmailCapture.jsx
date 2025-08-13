@@ -1,136 +1,275 @@
-// src/components/EmailCapture.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const EmailCapture = () => {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [position, setPosition] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email) return;
+  const [progressWidth, setProgressWidth] = useState(0);
+  const [slotsRemaining, setSlotsRemaining] = useState(200);
+  const [pulse, setPulse] = useState(false);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef(null);
+  
+  // Set up intersection observer for scroll trigger
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          // Start animations when section comes into view
+          setProgressWidth(90); // 90% full = 200 remaining out of 2000 total
+          
+          // Create pulsing effect
+          setPulse(true);
+          setTimeout(() => setPulse(false), 1000);
+          
+          // Set interval for periodic pulsing
+          const pulseInterval = setInterval(() => {
+            setPulse(true);
+            setTimeout(() => setPulse(false), 1000);
+          }, 8000);
+          
+          // Clean up observer and interval when component unmounts
+          return () => clearInterval(pulseInterval);
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of section is visible
+    );
     
-    setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setEmail('');
-      // Reset after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!name.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+    if (!email.trim()) {
+      alert("Please enter your email address");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+    if (!position) {
+      alert("Please select your nursing section");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://v1.nocodeapi.com/nursemoves/google_sheets/wSONYnesksfXcOGt?tabId=Sheet1",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([
+            [name, email, position, new Date().toISOString()],
+          ]),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setName("");
+        setEmail("");
+        setPosition("");
+        setSlotsRemaining(prev => Math.max(0, prev - 1)); // Decrement remaining slots
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        alert("Failed to submit. Please try again later.");
+        console.error("API Error:", result);
+      }
+    } catch (error) {
+      alert("An unexpected error occurred. Please try again.");
+      console.error("Submission Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 relative overflow-hidden">
+    <section 
+      ref={sectionRef}
+      className="py-16 bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 relative overflow-hidden"
+    >
       {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10">
-        <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-blue-500 mix-blend-soft-light"></div>
-        <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-purple-500 mix-blend-soft-light"></div>
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-indigo-800/20 animate-pulse-slow"></div>
+        <div className="absolute bottom-10 left-10 w-64 h-64 rounded-full bg-purple-700/20 animate-ping-slow"></div>
+        <div className="absolute top-1/3 right-1/4 w-32 h-32 rounded-full bg-blue-600/20 animate-pulse"></div>
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-white/20 shadow-xl">
-            <div className="inline-flex items-center justify-center mb-6">
-              <div className="bg-blue-500/20 p-3 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-              </div>
-            </div>
-            
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-              Join the <span className="text-blue-300">Future</span> of Nursing
-            </h2>
-            
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Be the first to experience our revolutionary platform. Join our exclusive waitlist for early access and updates.
-            </p>
-            
-            {isSubmitted ? (
-              <div className="bg-green-500/20 border border-green-400/30 rounded-xl py-6 px-8 max-w-lg mx-auto transition-all duration-500 animate-pulse">
-                <div className="flex items-center justify-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-green-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                  <span className="text-green-100 text-lg font-medium">
-                    Thank you! We'll notify you when we launch.
+        <div className="max-w-3xl mx-auto text-center bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-xl">
+          <h2 className="text-4xl font-bold text-white mb-2">
+            Join the <span className="text-blue-300">Future</span> of Nursing
+          </h2>
+          <p className="text-indigo-200 mb-6">
+            Secure your spot in our exclusive early access program
+          </p>
+          
+          {/* Slots Remaining Indicator - Only show animation when section is in view */}
+          <div className={`mb-8 transition-all duration-500 ${isSubmitted ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto"} ${inView ? "translate-y-0" : "translate-y-10 opacity-0"}`}>
+            <div className="relative bg-indigo-800/60 border border-indigo-400/30 rounded-2xl p-5 mb-4">
+              <div className="flex flex-col md:flex-row justify-between items-center mb-3 gap-4">
+                <div className="text-center md:text-left">
+                  <h3 className="text-lg font-bold text-white flex items-center justify-center md:justify-start">
+                    <span className={`inline-block w-3 h-3 rounded-full mr-2 ${pulse ? 'animate-ping bg-yellow-400' : 'bg-yellow-400'}`}></span>
+                    Limited Spots Available!
+                  </h3>
+                  <p className="text-indigo-200 text-sm mt-1">
+                    Don't miss your chance to be among the first
+                  </p>
+                </div>
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full px-4 py-2 shadow-lg transform hover:scale-105 transition-transform">
+                  <span className="text-white font-bold text-lg">
+                    {slotsRemaining} spots left
                   </span>
                 </div>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-                <div className="relative flex-grow">
-                  <input 
-                    type="email" 
-                    placeholder="Your email address" 
-                    className="w-full px-5 py-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-300 absolute right-4 top-1/2 transform -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                </div>
-                <button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold py-4 px-7 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50 focus:outline-none relative overflow-hidden"
+              
+              <div className="relative w-full h-4 bg-indigo-900/50 rounded-full overflow-hidden">
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${progressWidth}%` }}
                 >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Processing...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      Notify Me
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                      </svg>
-                    </span>
-                  )}
-                </button>
-              </form>
-            )}
-            
-            <p className="text-blue-200 text-sm mt-5 opacity-80 max-w-lg mx-auto">
-              We respect your privacy. Unsubscribe at any time. No spam, ever.
-            </p>
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-yellow-400/30 to-amber-500/30 animate-pulse"></div>
+                </div>
+              </div>
+              
+              <div className="flex justify-between mt-2 text-xs text-indigo-300">
+                <span>0</span>
+                <span>2000 total spots</span>
+              </div>
+            </div>
           </div>
           
-          <div className="mt-10 flex flex-wrap justify-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="w-8 h-8 rounded-full bg-blue-400 border-2 border-blue-800"></div>
-                ))}
+          {isSubmitted ? (
+            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-2xl py-8 px-8 animate-pulse">
+              <div className="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-green-100 text-xl font-medium">
+                  Thank you! We'll notify you when we launch.
+                </span>
+                <p className="text-green-200 mt-2">
+                  You've secured your spot among the first {2000 - slotsRemaining} nurses!
+                </p>
               </div>
-              <span className="text-blue-200 text-sm">
-                Join <span className="font-medium text-white">850+</span> nurses
-              </span>
             </div>
-            
-            <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span className="text-blue-200 text-sm">
-                Trusted by healthcare professionals
-              </span>
-            </div>
-          </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                  required
+                />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                  required
+                />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              
+              <div className="relative">
+                <select
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/90 border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                  required
+                >
+                  <option value="" disabled>
+                    Select your section
+                  </option>
+                  <option value="paediatric">Paediatric</option>
+                  <option value="icu">ICU</option>
+                  <option value="emergency">Emergency</option>
+                  <option value="surgical">Surgical</option>
+                  <option value="other">Other</option>
+                </select>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] shadow-lg ${
+                  isLoading ? "opacity-80 cursor-not-allowed" : "hover:shadow-blue-500/30"
+                }`}
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Securing your spot...
+                  </div>
+                ) : (
+                  "Pre-Subscribe Now"
+                )}
+              </button>
+              
+              <p className="text-indigo-200 text-sm pt-2">
+                Join {2000 - slotsRemaining} nurses who have already secured early access
+              </p>
+            </form>
+          )}
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 0.4; }
+        }
+        @keyframes ping-slow {
+          0% { transform: scale(0.8); opacity: 0.8; }
+          100% { transform: scale(2.5); opacity: 0; }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .animate-ping-slow {
+          animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+      `}</style>
     </section>
   );
 };
