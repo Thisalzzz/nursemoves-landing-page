@@ -1,4 +1,5 @@
 import './App.css'
+import Navbar from './components/NavBar';
 import HeroSection from './components/HeroSection';
 import ScreenshotSection from './components/ScreenshotSection';
 import FeaturesSection from './components/FeaturesSection';
@@ -10,6 +11,7 @@ function App() {
 
   return (
     <div className="font-sans">
+      <Navbar />
       <HeroSection />
       <ScreenshotSection />
       <FeaturesSection />

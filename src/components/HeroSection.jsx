@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-
-import scrub from "../assets/scrub.png";
-import tunes from "../assets/tunes.png";
-import nurse from "../assets/nurse.png";
+import logo from "../assets/logo.png";
+import hero from "../assets/hero.png";
 
 const HeroSection = () => {
   const [name, setName] = useState("");
@@ -67,12 +65,19 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="bg-white min-h-screen py-12 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12">
+    <section className="relative bg-white min-h-screen pt-24 py-12 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12">
+      {/* Logo - Top Left Corner */}
+      <img
+        src={logo}
+        alt="NurseMoves Logo"
+        className="absolute top-2 left-6 w-34 h-auto z-10"
+      />
+
       {/* Left Text + Form */}
       <div className="flex-1 max-w-lg">
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-          <span className="text-yellow-500"> NurseMoves </span> - Pre Subscribe
-          to the greatest app ever built for nurses
+          <span className="text-blue-600">The first ALL-IN-ONE</span> Wellness App <br />
+          <span className="text-blue-800">Designed Exclusively for Nurses.</span>
         </h1>
         <p className="text-lg text-gray-600 mt-2">designed by nurses</p>
 
@@ -127,31 +132,20 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Right Images */}
-      <div className="flex-1 flex flex-col items-center justify-center relative min-h-[500px] lg:min-h-[600px] w-full">
-        {/* Nurse Image - Mobile & Desktop */}
-        <img
-          src={nurse}
-          alt="Nurse"
-          className="
-            block 
-            w-40 sm:w-52 md:w-64 h-auto rounded-lg z-0 mb-6
-            lg:absolute lg:right-[-58px] lg:top-1/2 lg:-translate-y-1/2 lg:w-[30rem] lg:mb-0
-          "
-        />
+{/* Right Images */}
+<div className="flex-1 flex items-center justify-center relative min-h-[500px] lg:min-h-[600px] w-full">
 
-        {/* Phone Mockups */}
-        <img
-          src={scrub}
-          alt="App Mockup 1"
-          className="w-40 sm:w-52 md:w-64 lg:w-120 rounded-xl z-20 relative lg:absolute lg:left-1/2 lg:-translate-x-[60%] lg:-top-0"
-        />
-        <img
-          src={tunes}
-          alt="App Mockup 2"
-          className="w-40 sm:w-52 md:w-64 lg:w-120 rounded-xl z-10 relative mt-4 lg:absolute lg:left-1/2 lg:-translate-x-[40%] lg:top-30"
-        />
-      </div>
+  {/* Nurses - In Front, Bottom Right */}
+<img
+  src={hero}
+  alt="Nurses"
+  className="absolute z-10 bottom-0 right-0 
+             w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[40rem] 
+             max-w-[90%] h-auto"
+/>
+
+</div>
+
     </section>
   );
 };
