@@ -5,6 +5,7 @@ import ScreenshotSection from './components/ScreenshotSection';
 import FeaturesSection from './components/FeaturesSection';
 import EmailCapture from './components/EmailCapture';
 import Footer from './components/Footer';
+import FeatureSet from './components/FeatureSet';
 
 function App() {
 
@@ -14,9 +15,10 @@ function App() {
       <Navbar />
       <HeroSection />
       <ScreenshotSection />
-      <FeaturesSection />
+      <FeatureSet />
       <EmailCapture />
       <Footer />
+
     </div>
   )
 }
