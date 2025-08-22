@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion'; 
+import { motion } from 'framer-motion';
+import { Dumbbell, Smartphone, Radio, Brain } from "lucide-react"; // ✅ Icons
 import pulse from "../assets/pulse.png";
 import radio from "../assets/radio.png";
 import tunes from "../assets/tunes.png";
@@ -17,7 +18,8 @@ const FeatureSection = () => {
       reverse: false,
       bgColor: "bg-blue-50",
       accentColor: "text-blue-600",
-      borderColor: "border-blue-200"
+      borderColor: "border-blue-200",
+      icon: <Dumbbell className="w-6 h-6 text-blue-600" /> // yoga/stretch icon replacement
     },
     {
       id: 2,
@@ -29,7 +31,8 @@ const FeatureSection = () => {
       reverse: true,
       bgColor: "bg-pink-50",
       accentColor: "text-pink-600",
-      borderColor: "border-pink-200"
+      borderColor: "border-pink-200",
+      icon: <Smartphone className="w-6 h-6 text-pink-600" /> // phone/social icon
     },
     {
       id: 3,
@@ -41,7 +44,8 @@ const FeatureSection = () => {
       reverse: false,
       bgColor: "bg-amber-50",
       accentColor: "text-amber-600",
-      borderColor: "border-amber-200"
+      borderColor: "border-amber-200",
+      icon: <Radio className="w-6 h-6 text-amber-600" /> // radio icon
     },
     {
       id: 4,
@@ -53,7 +57,8 @@ const FeatureSection = () => {
       reverse: true,
       bgColor: "bg-violet-50",
       accentColor: "text-violet-600",
-      borderColor: "border-violet-200"
+      borderColor: "border-violet-200",
+      icon: <Brain className="w-6 h-6 text-violet-600" /> // thinking/brain icon
     }
   ];
 
@@ -81,12 +86,12 @@ const FeatureSection = () => {
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true, amount: 0.2 }}
             >
-              {/* Image (No container, just raw image) */}
+              {/* Image */}
               <div className="w-full lg:w-1/2 flex justify-center">
                 <img 
                   src={feature.phoneImage} 
                   alt="Feature" 
-                  className="w-full max-w-lg rounded-xl "
+                  className="w-full max-w-lg rounded-xl"
                 />
               </div>
               
@@ -95,9 +100,9 @@ const FeatureSection = () => {
                 <div className="p-6 rounded-xl bg-white border-l-4 border-blue-500 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`w-10 h-10 rounded-full ${feature.bgColor} flex items-center justify-center ${feature.borderColor} border-2`}>
-                      <span className={`font-bold ${feature.accentColor}`}>{feature.id}</span>
+                      {feature.icon} {/* ✅ Replaced number with icon */}
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+                    <h3 className="text-2xl md:text-4xl font-bold text-gray-900">
                       {feature.title}
                     </h3>
                   </div>
@@ -107,7 +112,7 @@ const FeatureSection = () => {
                   
                   {feature.highlight && (
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
-                      <p className="font-bold italic text-gray-900">
+                      <p className="text-lg font-bold italic text-gray-900">
                         {feature.highlight}
                       </p>
                     </div>

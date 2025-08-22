@@ -1,26 +1,17 @@
-import './App.css'
-import Navbar from './components/NavBar';
-import HeroSection from './components/HeroSection';
-import ScreenshotSection from './components/ScreenshotSection';
-import FeaturesSection from './components/FeaturesSection';
-import EmailCapture from './components/EmailCapture';
-import Footer from './components/Footer';
-import FeatureSet from './components/FeatureSet';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import ContactUs from "./pages/Contact";
 
 function App() {
-
-
   return (
-    <div className="font-sans">
-      <Navbar />
-      <HeroSection />
-      <ScreenshotSection />
-      <FeatureSet />
-      <EmailCapture />
-      <Footer />
-
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<ContactUs />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

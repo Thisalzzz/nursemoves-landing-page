@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import phone1 from "../assets/phone1.png";
 import phone2 from "../assets/phone2.png";
 import phone3 from "../assets/phone3.png";
@@ -24,30 +24,72 @@ const features = [
   },
 ];
 
+const slides = [
+  {
+    image: phone1,
+    title: "nurse tunes",
+  },
+  {
+    image: phone2,
+    title: "smart grocery picks",
+  },
+  {
+    image: phone3,
+    title: "mental toolkit",
+  },
+];
+
 const ApplicationFeatures = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="bg-white py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
-        {/* Left: Blue Background with Phones - Extended to left edge */}
+        {/* Left: Blue Background with Slider - Extended to left edge */}
         <div className="relative">
           <div className="bg-blue-800 flex justify-center items-center py-12 rounded-xl lg:rounded-l-none lg:pl-0 lg:pr-0">
-            <div className="flex space-x-4 px-4 w-full justify-center">
-              <img
-                src={phone1}
-                alt="App Screenshot 1"
-                className="w-1/3 max-w-[150px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[240px] rounded-xl"
-              />
-              <img
-                src={phone2}
-                alt="App Screenshot 2"
-                className="w-1/3 max-w-[150px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[240px] rounded-xl"
-              />
-              <img
-                src={phone3}
-                alt="App Screenshot 3"
-                className="w-1/3 max-w-[150px] sm:max-w-[180px] md:max-w-[200px] lg:max-w-[240px] rounded-xl"
-              />
+            <div className="w-full px-4">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                >
+                  {slides.map((slide, idx) => (
+                    <div
+                      key={idx}
+                      className="w-full flex-shrink-0 flex flex-col items-center justify-center"
+                    >
+                      <img
+                        src={slide.image}
+                        alt={`App Screenshot ${idx + 1}`}
+                        className="w-auto max-w-[180px] sm:max-w-[220px] md:max-w-[240px] lg:max-w-[280px] rounded-xl"
+                      />
+                      <p className="mt-4 text-white font-semibold text-lg text-center">
+                        {slide.title}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-center mt-6">
+                {slides.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`w-3 h-3 rounded-full mx-2 transition-colors ${
+                      idx === currentIndex ? "bg-white" : "bg-blue-400"
+                    }`}
+                  ></button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="hidden lg:block absolute top-0 bottom-0 -left-48 w-48 bg-blue-800"></div>

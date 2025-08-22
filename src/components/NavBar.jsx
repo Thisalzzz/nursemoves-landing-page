@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react"; // modern icons
-import logo from "../assets/logo.png";  // your logo
+import { Link } from "react-router-dom"; // ✅ import Link
+import logo from "../assets/logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { name: "Home", href: "#home" },
-    { name: "Photo", href: "#photo" },
-    { name: "About Us", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },        // now routes
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -18,24 +17,26 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-15 w-auto cursor-pointer"
-            />
+            <Link to="/">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-20 mt-3 w-auto cursor-pointer"
+              />
+            </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-10">
             {links.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="relative text-gray-700 font-medium hover:text-blue-600 transition duration-300 group"
               >
                 {link.name}
                 <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -55,14 +56,14 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white shadow-lg rounded-lg mx-4 mt-2 overflow-hidden">
           {links.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.href}
               className="block px-6 py-3 text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
               onClick={() => setIsOpen(false)}
             >
               {link.name}
-            </a>
+            </Link>
           ))}
         </div>
       )}

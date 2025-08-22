@@ -76,15 +76,14 @@ const HeroSection = () => {
       {/* Left Text + Form */}
       <div className="flex-1 max-w-lg">
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-          <span className="text-blue-600">The first ALL-IN-ONE</span> Wellness App <br />
+          <span className="text-yellow-600">The first ALL-IN-ONE</span> Wellness App <br />
           <span className="text-blue-800">Designed Exclusively for Nurses.</span>
         </h1>
-        <p className="text-lg text-gray-600 mt-2">designed by nurses</p>
 
         <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
-          <p className="text-sm text-gray-700 mb-4">
+          <p className="text-lg text-gray-700 mb-4">
             Be one of the first{" "}
-            <span className="font-semibold">1000 pre-subscribers</span> to use
+            <span className="font-semibold">500 free subscribers</span> to use
             the app for free!
           </p>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -113,10 +112,13 @@ const HeroSection = () => {
               <option value="" disabled>
                 Select your section
               </option>
-              <option value="paediatric">Paediatric</option>
-              <option value="icu">ICU</option>
-              <option value="emergency">Emergency</option>
-              <option value="surgical">Surgical</option>
+              <option value="paediatric">Paramedic/EMT</option>
+              <option value="icu">Registered Nurse (RN)</option>
+              <option value="emergency">Licensed Practical Nurse (LPN)</option>
+              <option value="surgical">Nurse Practitioner (NP)</option>
+              <option value="other">Student Nurse</option>
+              <option value="other">Physician</option>
+              <option value="other">Therapist (PT/OT/RT)</option>
               <option value="other">Other</option>
             </select>
             <button

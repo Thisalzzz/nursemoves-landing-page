@@ -7,7 +7,7 @@ const EmailCapture = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [progressWidth, setProgressWidth] = useState(0);
-  const [slotsRemaining, setSlotsRemaining] = useState(200);
+  const [slotsRemaining, setSlotsRemaining] = useState(50);
   const [pulse, setPulse] = useState(false);
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
@@ -156,7 +156,7 @@ const EmailCapture = () => {
               
               <div className="flex justify-between mt-2 text-xs text-indigo-300">
                 <span>0</span>
-                <span>2000 total spots</span>
+                <span>500 total spots</span>
               </div>
             </div>
           </div>
@@ -247,7 +247,7 @@ const EmailCapture = () => {
               </button>
               
               <p className="text-indigo-200 text-sm pt-2">
-                Join {2000 - slotsRemaining} nurses who have already secured early access
+                Join {500 - slotsRemaining} nurses who have already secured early access
               </p>
             </form>
           )}
