@@ -11,7 +11,7 @@ const FeatureSection = () => {
     {
       id: 1,
       title: 'Tailored Stretch Routines',
-      description: 'Relieve tension, prevent injury, and keep your body strong with quick, nurse-specific stretches you can do right on shift.',
+      description: 'Relieve tension, prevent injury, and keep your body strong with quick, nurse-specific stretches you can do pre-shift, on-shift, and post-shift.',
       description2: "From scrubs to sneakers, these short, targeted routines are designed around the real movements, strain points, and time limits nurses face every day.",
       highlight: 'Because when you take care of your body, you’re taking care of your career.',
       phoneImage: back,
@@ -39,7 +39,7 @@ const FeatureSection = () => {
       title: 'Nurse Radio',
       description: 'Your daily dose of connection, knowledge, and a little inspiration — right in your ears.',
       description2: "Tune in for fresh conversations on nursing life, career growth, mental health, and real-world stories from the frontlines. Whether you’re commuting, charting, or winding down, you’ll always have a voice in your corner.",
-      highlight: 'Because every nurse deserves a soundtrack that speaks to their journey.',
+      highlight: 'Whether you’re on the subway, on the bus, or heading back from work and winding down, you’ll always have a safe corner that you understand — and that understands you.',
       phoneImage: radio,
       reverse: false,
       bgColor: "bg-amber-50",
@@ -71,7 +71,7 @@ const FeatureSection = () => {
             Designed <span className="text-blue-600">Exclusively</span> for Nurses
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Our suite of features supports your physical health, mental well-being, and professional community
+            Be a part of this groundbreaking, tailor-made app designed specifically for the world of nurses.
           </p>
         </div>
         

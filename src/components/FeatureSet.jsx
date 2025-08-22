@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import phone1 from "../assets/phone1.png";
 import phone2 from "../assets/phone2.png";
 import phone3 from "../assets/phone3.png";
+import phone4 from "../assets/phone4.png";
+
 
 const features = [
   {
@@ -36,6 +38,10 @@ const slides = [
   {
     image: phone3,
     title: "mental toolkit",
+  },
+    {
+    image: phone4,
+    title: "Nurse Laughs",
   },
 ];
 

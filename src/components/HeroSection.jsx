@@ -81,7 +81,7 @@ const HeroSection = () => {
         </h1>
 
         <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
-          <p className="text-lg text-gray-700 mb-4">
+          <p className="text-lg font-bold text-gray-700 mb-4 uppercase">
             Be one of the first{" "}
             <span className="font-semibold">500 free subscribers</span> to use
             the app for free!
@@ -110,7 +110,7 @@ const HeroSection = () => {
               required
             >
               <option value="" disabled>
-                Select your section
+                Select your occupation
               </option>
               <option value="paediatric">Paramedic/EMT</option>
               <option value="icu">Registered Nurse (RN)</option>
@@ -124,7 +124,7 @@ const HeroSection = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition ${
+              className={`w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition ${
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >

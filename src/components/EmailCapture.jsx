@@ -213,13 +213,16 @@ const EmailCapture = () => {
                   required
                 >
                   <option value="" disabled>
-                    Select your section
+                    Select your occupation
                   </option>
-                  <option value="paediatric">Paediatric</option>
-                  <option value="icu">ICU</option>
-                  <option value="emergency">Emergency</option>
-                  <option value="surgical">Surgical</option>
-                  <option value="other">Other</option>
+                    <option value="paediatric">Paramedic/EMT</option>
+                    <option value="icu">Registered Nurse (RN)</option>
+                    <option value="emergency">Licensed Practical Nurse (LPN)</option>
+                    <option value="surgical">Nurse Practitioner (NP)</option>
+                    <option value="other">Student Nurse</option>
+                    <option value="other">Physician</option>
+                    <option value="other">Therapist (PT/OT/RT)</option>
+                    <option value="other">Other</option>
                 </select>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -228,8 +231,9 @@ const EmailCapture = () => {
               
               <button
                 type="submit"
+
                 disabled={isLoading}
-                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] shadow-lg ${
+                className={`w-full cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 rounded-lg font-bold text-lg transition-all transform hover:scale-[1.02] shadow-lg ${
                   isLoading ? "opacity-80 cursor-not-allowed" : "hover:shadow-blue-500/30"
                 }`}
               >
@@ -247,7 +251,7 @@ const EmailCapture = () => {
               </button>
               
               <p className="text-indigo-200 text-sm pt-2">
-                Join {500 - slotsRemaining} nurses who have already secured early access
+                Join the Nurse Community that already secured free early access.
               </p>
             </form>
           )}
