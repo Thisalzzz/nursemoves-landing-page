@@ -215,13 +215,11 @@ const EmailCapture = () => {
                   <option value="" disabled>
                     Select your occupation
                   </option>
-                    <option value="paediatric">Paramedic/EMT</option>
+                    <option value="paediatric">Certified Nursing Assistant</option>
                     <option value="icu">Registered Nurse (RN)</option>
                     <option value="emergency">Licensed Practical Nurse (LPN)</option>
                     <option value="surgical">Nurse Practitioner (NP)</option>
                     <option value="other">Student Nurse</option>
-                    <option value="other">Physician</option>
-                    <option value="other">Therapist (PT/OT/RT)</option>
                     <option value="other">Other</option>
                 </select>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -112,13 +112,11 @@ const HeroSection = () => {
               <option value="" disabled>
                 Select your occupation
               </option>
-              <option value="paediatric">Paramedic/EMT</option>
+              <option value="paediatric">Certified Nursing Assistant)</option>
               <option value="icu">Registered Nurse (RN)</option>
               <option value="emergency">Licensed Practical Nurse (LPN)</option>
               <option value="surgical">Nurse Practitioner (NP)</option>
               <option value="other">Student Nurse</option>
-              <option value="other">Physician</option>
-              <option value="other">Therapist (PT/OT/RT)</option>
               <option value="other">Other</option>
             </select>
             <button

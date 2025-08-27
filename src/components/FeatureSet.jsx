@@ -3,6 +3,8 @@ import phone1 from "../assets/phone1.png";
 import phone2 from "../assets/phone2.png";
 import phone3 from "../assets/phone3.png";
 import phone4 from "../assets/phone4.png";
+import phone5 from "../assets/phone5.png";
+import phone6 from "../assets/phone6.png";
 
 
 const features = [
@@ -42,6 +44,14 @@ const slides = [
     {
     image: phone4,
     title: "Nurse Laughs",
+  },
+      {
+    image: phone5,
+    title: "Sleep Support",
+  },
+      {
+    image: phone6,
+    title: "Burnout Tracker",
   },
 ];
 
