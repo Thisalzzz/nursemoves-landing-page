@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
-import hero from "../assets/hero.png";
+import video from "../assets/video.mp4"; // ✅ Import the video
 
 const HeroSection = () => {
   const [name, setName] = useState("");
@@ -65,7 +65,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative bg-white min-h-screen pt-24 py-12 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12">
+    <section className="relative bg-white min-h-screen pt-20 py-12 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12">
       {/* Logo - Top Left Corner */}
       <img
         src={logo}
@@ -75,10 +75,19 @@ const HeroSection = () => {
 
       {/* Left Text + Form */}
       <div className="flex-1 max-w-lg">
+        {/* ✅ Updated Hero Statement */}
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-          <span className="text-yellow-600">The first ALL-IN-ONE</span> Wellness App <br />
-          <span className="text-blue-800">Designed Exclusively for Nurses.</span>
+          The <span className="text-yellow-600">FIRST ALL-IN-ONE</span> wellness app designed <br />
+          <span className="text-blue-800">
+            EXCLUSIVELY FOR NURSES
+          </span>{" "}
+
         </h1>
+
+        {/* ✅ Subheadline */}
+        <p className="mt-4 text-lg text-gray-600">
+          Your daily podcast covering all things in the world of nursing released daily.
+        </p>
 
         <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
           <p className="text-lg font-bold text-gray-700 mb-4 uppercase">
@@ -112,11 +121,11 @@ const HeroSection = () => {
               <option value="" disabled>
                 Select your occupation
               </option>
-              <option value="paediatric">Certified Nursing Assistant)</option>
-              <option value="icu">Registered Nurse (RN)</option>
-              <option value="emergency">Licensed Practical Nurse (LPN)</option>
-              <option value="surgical">Nurse Practitioner (NP)</option>
-              <option value="other">Student Nurse</option>
+              <option value="cna">Certified Nursing Assistant</option>
+              <option value="rn">Registered Nurse (RN)</option>
+              <option value="lpn">Licensed Practical Nurse (LPN)</option>
+              <option value="np">Nurse Practitioner (NP)</option>
+              <option value="student">Student Nurse</option>
               <option value="other">Other</option>
             </select>
             <button
@@ -132,20 +141,17 @@ const HeroSection = () => {
         </div>
       </div>
 
-{/* Right Images */}
-<div className="flex-1 flex items-center justify-center relative min-h-[500px] lg:min-h-[600px] w-full">
-
-  {/* Nurses - In Front, Bottom Right */}
-<img
-  src={hero}
-  alt="Nurses"
-  className="absolute z-10 bottom-0 right-0 
-             w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[40rem] 
-             max-w-[90%] h-auto"
-/>
-
-</div>
-
+      {/* Right Side - Video */}
+      <div className="flex-1 flex items-center justify-center relative w-full">
+        <video
+          src={video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="max-h-[500px] lg:max-h-[600px] w-auto rounded-lg shadow-lg object-contain"
+        />
+      </div>
     </section>
   );
 };

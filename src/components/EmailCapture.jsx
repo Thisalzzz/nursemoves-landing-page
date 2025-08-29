@@ -4,6 +4,7 @@ const EmailCapture = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [position, setPosition] = useState("");
+  const [reason, setReason] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [progressWidth, setProgressWidth] = useState(0);
@@ -73,12 +74,12 @@ const EmailCapture = () => {
 
     try {
       const response = await fetch(
-        "https://v1.nocodeapi.com/nursemoves/google_sheets/wSONYnesksfXcOGt?tabId=Sheet1",
+        "https://v1.nocodeapi.com/nursemoves/google_sheets/eNtUfxCVDzZsffjD?tabId=Sheet1",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
-            [name, email, position, new Date().toISOString()],
+            [name, email, position, reason, new Date().toISOString()],
           ]),
         }
       );
@@ -90,6 +91,7 @@ const EmailCapture = () => {
         setName("");
         setEmail("");
         setPosition("");
+        setReason("");
         setSlotsRemaining(prev => Math.max(0, prev - 1)); // Decrement remaining slots
         setTimeout(() => setIsSubmitted(false), 5000);
       } else {
@@ -225,6 +227,24 @@ const EmailCapture = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3.5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Let us know the main challenges you face"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  className="w-full px-4 py-3 bg-white/90 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                  required
+                />
+              <svg xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 text-gray-400 absolute right-3 top-3.5" 
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d="M11 5h2M12 19a7 7 0 100-14 7 7 0 000 14zm-4.5-7l7-7 4 4-7 7H7v-4z" />
+              </svg>
+
               </div>
               
               <button
